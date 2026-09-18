@@ -1,10 +1,13 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+import entity.BankAccount;
 import util.DataBaseConnection;
 
 public class BankAccountDao {
@@ -32,5 +35,47 @@ public class BankAccountDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public BankAccount find(long accountNumber)
+	{
+		String query="SELECT * FROM BANK_ACCOUNT WHERE ACCOUNT_NUMBER =?";
+		Connection connection=DataBaseConnection.getConnection();
+		BankAccount bankAccount =null;
+		try {
+			PreparedStatement preparedStatement=connection.prepareStatement(query);
+			
+			preparedStatement.setLong(1, accountNumber);
+			
+			ResultSet resultSet=preparedStatement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				long retrieved_accountNumber=resultSet.getLong(1);
+				String accountHolderName=resultSet.getString(2);
+				String email=resultSet.getString(3);
+				long phoneNumber=resultSet.getLong(4);
+				double balance=resultSet.getDouble(5);
+				String accountType=resultSet.getString(6);
+				LocalDateTime dateTime=resultSet.getTimestamp(7).toLocalDateTime();
+				
+				bankAccount=new BankAccount(retrieved_accountNumber,accountHolderName,email,
+						phoneNumber,balance,accountType,dateTime);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(connection!=null)
+			{
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return bankAccount;
 	}
 }

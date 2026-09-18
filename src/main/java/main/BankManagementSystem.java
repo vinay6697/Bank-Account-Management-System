@@ -21,57 +21,76 @@ public class BankManagementSystem {
 			int choice=sc.nextInt();
 			switch(choice)
 			{
-			case 1:
-			{
-				System.out.println("Enter the account number");
-				long accountNumber=sc.nextLong();
+				case 1:
+				{
+					System.out.println("Enter the account number");
+					long accountNumber=sc.nextLong();
+					
+					System.out.println("Enter the account holder name");
+					sc.nextLine();
+					String name=sc.nextLine();
+					
+					
+					System.out.println("Enter the email");
+					String email=sc.nextLine();
+					
+					System.out.println("Enter the phoneNumber");
+					long phoneNumber=sc.nextLong();
+					
+					System.out.println("Enter the balance");
+					double balance=sc.nextDouble();
+					sc.nextLine();
+					
+					System.out.println("Enter the account type");
+					String accountType=sc.nextLine();
+	//				sc.nextLine();
+					
+					LocalDateTime dateTime = LocalDateTime.now();
+					
+					BankAccount account=new BankAccount(accountNumber,name,email,phoneNumber,balance,accountType,dateTime);
+					service.createAccount(account);
+					break;
+				}
+				case 2:
+				{
+					
+					break;
+				}
+				case 3:
+				{
+					System.out.println("Enter the accountNumber");
+					long accountNumber=sc.nextLong();
+					
+					BankAccount account=service.find(accountNumber);
+					if(account!=null) {
+						System.out.println("Account number is:"+account.getAccountNumber());
+						System.out.println("Customer name  is:"+account.getAccountHolderName());
+						System.out.println("Customer email is:"+account.getEmail());
+						System.out.println("Customer Phone is:"+account.getAccountNumber());
+						System.out.println("Customer balance is:"+account.getBalance());
+						System.out.println("account number is:"+account.getAccountType());
+						System.out.println("account created on is:"+account.getDateTime());
+					}
+					else
+					{
+						System.out.println("account not found");
+					}
+					
+					break;
+				}
+				case 4:
+				{
+					break;
+				}
+				default:
+				{
+					break;
+				}
 				
-				System.out.println("Enter the account holder name");
-				sc.nextLine();
-				String name=sc.nextLine();
-				
-				
-				System.out.println("Enter the email");
-				String email=sc.nextLine();
-				
-				System.out.println("Enter the phoneNumber");
-				long phoneNumber=sc.nextLong();
-				
-				System.out.println("Enter the balance");
-				double balance=sc.nextDouble();
-				sc.nextLine();
-				
-				System.out.println("Enter the account type");
-				String accountType=sc.nextLine();
-//				sc.nextLine();
-				
-				LocalDateTime dateTime = LocalDateTime.now();
-				
-				BankAccount account=new BankAccount(accountNumber,name,email,phoneNumber,balance,accountType,dateTime);
-				service.createAccount(account);
-				break;
-			}
-			case 2:
-			{
-				break;
-			}
-			case 3:
-			{
-				break;
-			}
-			case 4:
-			{
-				break;
-			}
-			default:
-			{
-				break;
-			}
+			}//end of switch
 			
-			}
-			
-			System.out.println("do you want to repeat the \\nEnter Y for YES  & N for NO");
-			str=sc.nextLine();
+			System.out.println("do you want to repeat the \nEnter Y for YES  & N for NO");
+			str=sc.next();
 		}while(c.equalsIgnoreCase(str));
 		
 		sc.close();

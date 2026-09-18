@@ -18,7 +18,10 @@ public class BankAccountService {
 		LocalDateTime dateTime=account.getDateTime();
 		
 		dao.createAccount(accountNumber,name,email,phoneNumber,balance,accountType,dateTime);
-//		dao.createAccount(account);
 	}
-
+	
+	public BankAccount find(long accountNumber)
+	{
+		return dao.find(accountNumber);
+	}
 }
