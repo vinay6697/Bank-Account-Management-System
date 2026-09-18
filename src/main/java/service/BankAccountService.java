@@ -24,4 +24,8 @@ public class BankAccountService {
 	{
 		return dao.find(accountNumber);
 	}
+	
+	public boolean deleteAccount(long accountNumber) {
+		return dao.delete(accountNumber);
+	}
 }

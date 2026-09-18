@@ -80,6 +80,13 @@ public class BankManagementSystem {
 				}
 				case 4:
 				{
+					System.out.println("Enter the accountNumber");
+					long accountNumber=sc.nextLong();
+					boolean result=service.deleteAccount(accountNumber);
+					if(result)
+						System.out.println("account deleted successfully");
+					else
+						System.out.println("Error occured account not deleted");
 					break;
 				}
 				default:

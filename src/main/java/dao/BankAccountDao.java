@@ -1,7 +1,6 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -77,5 +76,38 @@ public class BankAccountDao {
 			}
 		}
 		return bankAccount;
+	}
+	
+	public boolean delete(long accountNumber)
+	{
+		int result=0;
+		String query="DELETE FROM BANK_ACCOUNT WHERE ACCOUNT_NUMBER =?";
+		Connection connection=DataBaseConnection.getConnection();
+		try {
+			PreparedStatement preparedStatement=connection.prepareStatement(query);
+			
+			preparedStatement.setLong(1, accountNumber);
+			
+			result=preparedStatement.executeUpdate();
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(connection!=null)
+			{
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		if(result>0)
+			return true;
+		else
+			return false;
 	}
 }
