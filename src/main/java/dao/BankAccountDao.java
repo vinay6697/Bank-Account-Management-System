@@ -34,8 +34,48 @@ public class BankAccountDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		finally {
+			if(connection!=null)
+			{
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
+	
+	public boolean updateAccount(long accountNumber,String email,long phonenumber)
+	{
+		String query="UPDATE BANK_ACCOUNT SET EMAIL=? AND SET PHONENUMBER=?";
+		
+		Connection connection=DataBaseConnection.getConnection();
+		int result=0;
+		try {
+			PreparedStatement preparedStatement=connection.prepareStatement(query);
+			
+			preparedStatement.setString(1, email);
+			preparedStatement.setLong(2, phonenumber);
+			
+			result=preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(connection!=null)
+			{
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result>0?true:false;
+		
+	}
 	public BankAccount find(long accountNumber)
 	{
 		String query="SELECT * FROM BANK_ACCOUNT WHERE ACCOUNT_NUMBER =?";
@@ -105,9 +145,6 @@ public class BankAccountDao {
 				}
 			}
 		}
-		if(result>0)
-			return true;
-		else
-			return false;
+		return result>0?true:false;
 	}
 }
