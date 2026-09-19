@@ -5,12 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import entity.BankAccount;
 import util.DataBaseConnection;
 
 public class BankAccountDao {
-	public void createAccount(long accountNumber, String accountHolderName, String email, long phoneNumber, double balance,
+	
+public void createAccount(long accountNumber, String accountHolderName, String email, long phoneNumber, double balance,
 			String accountType, LocalDateTime dateTime)
 	{
 		String query="INSERT INTO BANK_ACCOUNT VALUES(?,?,?,?,?,?,?)";
@@ -46,10 +49,9 @@ public class BankAccountDao {
 		}
 	}
 	
-	
 	public boolean updateAccount(long accountNumber,String email,long phonenumber)
 	{
-		String query="UPDATE BANK_ACCOUNT SET EMAIL=? AND SET PHONENUMBER=?";
+		String query="UPDATE BANK_ACCOUNT SET EMAIL=?,PHONE_NUMBER=? WHERE ACCOUNT_nUMBER=?";
 		
 		Connection connection=DataBaseConnection.getConnection();
 		int result=0;
@@ -58,6 +60,7 @@ public class BankAccountDao {
 			
 			preparedStatement.setString(1, email);
 			preparedStatement.setLong(2, phonenumber);
+			preparedStatement.setLong(3, accountNumber);
 			
 			result=preparedStatement.executeUpdate();
 		} catch (SQLException e) {
@@ -76,6 +79,7 @@ public class BankAccountDao {
 		return result>0?true:false;
 		
 	}
+	
 	public BankAccount find(long accountNumber)
 	{
 		String query="SELECT * FROM BANK_ACCOUNT WHERE ACCOUNT_NUMBER =?";
@@ -146,5 +150,40 @@ public class BankAccountDao {
 			}
 		}
 		return result>0?true:false;
+	}
+
+	public List<BankAccount> findAllAccounts()
+	{
+		String query="SELECT * FROM BANK_ACCOUNT ORDER BY ACCOUNT_NUMBER ASC";
+		Connection connection=DataBaseConnection.getConnection();
+		
+		List<BankAccount> bankAccounts=new ArrayList<>();
+		
+		BankAccount account=new BankAccount();
+		
+		try {
+			PreparedStatement preparedStatement=connection.prepareStatement(query);
+			
+			ResultSet resultSet=preparedStatement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				long accountNumber=resultSet.getLong(1);
+				String name=resultSet.getString(2);
+				String email=resultSet.getString(3);
+				long phoneNumber=resultSet.getLong(4);
+				long balance=resultSet.getLong(5);
+				String accountType=resultSet.getString(6);
+				LocalDateTime dateTime=resultSet.getTimestamp(7).toLocalDateTime();
+				
+				account=new BankAccount(accountNumber,name,email,phoneNumber,balance,accountType,dateTime);
+				
+				bankAccounts.add(account);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return bankAccounts.size()!=0?bankAccounts:null;
 	}
 }

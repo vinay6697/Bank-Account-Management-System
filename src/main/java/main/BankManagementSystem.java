@@ -1,6 +1,7 @@
 package main;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Scanner;
 
 import entity.BankAccount;
@@ -17,6 +18,7 @@ public class BankManagementSystem {
 			System.out.println("Enter 2 to update an account");
 			System.out.println("Enter 3 to find an account");
 			System.out.println("Enter 4 to delete an account");
+			System.out.println("Enter 5 to find al the accounts");
 			
 			int choice=sc.nextInt();
 			switch(choice)
@@ -43,7 +45,6 @@ public class BankManagementSystem {
 					
 					System.out.println("Enter the account type");
 					String accountType=sc.nextLine();
-	//				sc.nextLine();
 					
 					LocalDateTime dateTime = LocalDateTime.now();
 					
@@ -53,7 +54,22 @@ public class BankManagementSystem {
 				}
 				case 2:
 				{
+					System.out.println("Enter the account id");
+					long accountNumber=sc.nextLong();
 					
+					System.out.println("Enter the email");
+					String email=sc.nextLine();
+					sc.nextLine();
+					
+					System.out.println("Enter the phoneNumber");
+					long phoneNumber=sc.nextLong();
+					
+					boolean result=service.updateAccount(accountNumber, email, phoneNumber);
+					
+					if(result)
+						System.out.println("account details updated successfully");
+					else
+						System.out.println("details not updated ");
 					break;
 				}
 				case 3:
@@ -63,13 +79,13 @@ public class BankManagementSystem {
 					
 					BankAccount account=service.find(accountNumber);
 					if(account!=null) {
-						System.out.println("Account number is:"+account.getAccountNumber());
-						System.out.println("Customer name  is:"+account.getAccountHolderName());
-						System.out.println("Customer email is:"+account.getEmail());
-						System.out.println("Customer Phone is:"+account.getAccountNumber());
-						System.out.println("Customer balance is:"+account.getBalance());
-						System.out.println("account number is:"+account.getAccountType());
-						System.out.println("account created on is:"+account.getDateTime());
+						System.out.println("Account number is \t:"+account.getAccountNumber());
+						System.out.println("Customer name  is \t:"+account.getAccountHolderName());
+						System.out.println("Customer email is \t:"+account.getEmail());
+						System.out.println("Customer Phone is \t:"+account.getAccountNumber());
+						System.out.println("Customer balance is \t:"+account.getBalance());
+						System.out.println("account number is \t:"+account.getAccountType());
+						System.out.println("account created on is \t:"+account.getDateTime());
 					}
 					else
 					{
@@ -88,6 +104,28 @@ public class BankManagementSystem {
 					else
 						System.out.println("Error occured account not deleted");
 					break;
+				}
+				case 5:
+				{
+					List<BankAccount> bankAccounts=service.findAllAccounts();
+					if(bankAccounts!=null)
+					{
+						for(BankAccount account:bankAccounts)
+						{
+							System.out.println("Account number is \t:"+account.getAccountNumber());
+							System.out.println("Customer name  is \t:"+account.getAccountHolderName());
+							System.out.println("Customer email is \t:"+account.getEmail());
+							System.out.println("Customer Phone is \t:"+account.getAccountNumber());
+							System.out.println("Customer balance is \t:"+account.getBalance());
+							System.out.println("account number is \t:"+account.getAccountType());
+							System.out.println("account created on is \t:"+account.getDateTime());
+							System.out.println("---------------------------------------------");
+						}
+					}
+					else
+					{
+						System.out.println("unable to fetch all the accounts");
+					}
 				}
 				default:
 				{

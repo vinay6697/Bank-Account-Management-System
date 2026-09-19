@@ -14,7 +14,7 @@ public class BankAccount {
 	/*
 	 * NO Argument constructor
 	 */
-	BankAccount()
+	public BankAccount()
 	{
 		
 	}

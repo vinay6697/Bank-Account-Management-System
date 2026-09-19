@@ -1,12 +1,14 @@
 package service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import dao.BankAccountDao;
 import entity.BankAccount;
 
 public class BankAccountService {
 	BankAccountDao dao=new BankAccountDao();
+	
 	public void createAccount(BankAccount account)
 	{
 		long accountNumber=account.getAccountNumber();
@@ -27,5 +29,15 @@ public class BankAccountService {
 	
 	public boolean deleteAccount(long accountNumber) {
 		return dao.delete(accountNumber);
+	}
+	
+	public boolean updateAccount(long accountNumber,String email,long phoneNumber)
+	{
+		return dao.updateAccount(accountNumber,email, phoneNumber);
+	}
+	
+	public List<BankAccount> findAllAccounts()
+	{
+		return dao.findAllAccounts();
 	}
 }
