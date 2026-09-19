@@ -13,11 +13,20 @@ import util.DataBaseConnection;
 
 public class BankAccountDao {
 	
-public void createAccount(long accountNumber, String accountHolderName, String email, long phoneNumber, double balance,
-			String accountType, LocalDateTime dateTime)
+public boolean createAccount(BankAccount account)
 	{
+	
+	long accountNumber=account.getAccountNumber();
+	String accountHolderName=account.getAccountHolderName();
+	String email=account.getEmail();
+	long phoneNumber=account.getPhoneNumber();
+	double balance=account.getBalance();
+	String accountType=account.getAccountType();
+	LocalDateTime dateTime=account.getDateTime();
+	
 		String query="INSERT INTO BANK_ACCOUNT VALUES(?,?,?,?,?,?,?)";
 		Connection connection=DataBaseConnection.getConnection();
+		int result=0;
 		try {
 			PreparedStatement preparedStatement=connection.prepareStatement(query);
 			preparedStatement.setLong(1, accountNumber);
@@ -28,12 +37,9 @@ public void createAccount(long accountNumber, String accountHolderName, String e
 			preparedStatement.setString(6, accountType);
 			preparedStatement.setTimestamp(7,java.sql.Timestamp.valueOf(dateTime));
 			
-			int result=preparedStatement.executeUpdate();
+			result=preparedStatement.executeUpdate();
 			System.out.println(result);
-			if(result>0)
-				System.out.println("account details stored successfully");
-			else
-				System.out.println("Unknown error found");
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -47,6 +53,7 @@ public void createAccount(long accountNumber, String accountHolderName, String e
 				}
 			}
 		}
+		return result>0?true:false;
 	}
 	
 	public boolean updateAccount(long accountNumber,String email,long phonenumber)

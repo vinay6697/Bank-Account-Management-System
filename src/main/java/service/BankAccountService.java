@@ -1,6 +1,5 @@
 package service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import dao.BankAccountDao;
@@ -9,17 +8,27 @@ import entity.BankAccount;
 public class BankAccountService {
 	BankAccountDao dao=new BankAccountDao();
 	
-	public void createAccount(BankAccount account)
+	public boolean createAccount(BankAccount account)
 	{
-		long accountNumber=account.getAccountNumber();
-		String name=account.getAccountHolderName();
-		String email=account.getEmail();
-		long phoneNumber=account.getPhoneNumber();
-		double balance=account.getBalance();
-		String accountType=account.getAccountType();
-		LocalDateTime dateTime=account.getDateTime();
+		if(account==null)
+		{
+			System.out.println("invalid account");
+		return false;
+		}
 		
-		dao.createAccount(accountNumber,name,email,phoneNumber,balance,accountType,dateTime);
+		if(account.getBalance()<0)
+		{
+			System.out.println("balance cannot be negative");
+			return false;
+		}
+		
+		if(account.getAccountHolderName()==null || account.getAccountHolderName().isBlank() )
+		{
+			System.out.println("Account holder name is required");
+			return false;
+		}
+		
+		return dao.createAccount(account);
 	}
 	
 	public BankAccount find(long accountNumber)

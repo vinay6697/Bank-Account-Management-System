@@ -129,12 +129,13 @@ public class BankManagementSystem {
 				}
 				default:
 				{
+					System.out.println("Invalid input \nplease enter the valid input");
 					break;
 				}
 				
 			}//end of switch
 			
-			System.out.println("do you want to repeat the \nEnter Y for YES  & N for NO");
+			System.out.println("Do you want to repeat the \nEnter Y for YES  & N for NO");
 			str=sc.next();
 		}while(c.equalsIgnoreCase(str));
 		
