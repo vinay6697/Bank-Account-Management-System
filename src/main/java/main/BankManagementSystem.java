@@ -20,6 +20,7 @@ public class BankManagementSystem {
 			System.out.println("Enter 4 to delete an account");
 			System.out.println("Enter 5 to find all the accounts");
 			System.out.println("Enter 6 to deposit the money into account");
+			System.out.println("Enter 7 to check balance");
 			
 			int choice=sc.nextInt();
 			switch(choice)
@@ -142,6 +143,17 @@ public class BankManagementSystem {
 					else
 						System.out.println("error occured deposite failed");
 					break;
+				}
+				case 7:
+				{
+					System.out.println("Enter the accountNumber");
+					long accountNumber=sc.nextLong();
+					
+					double balance=service.checkBalance(accountNumber);
+					if(balance>0.0)
+						System.out.println("balance is: "+balance);
+					else
+						System.out.println("unable to fetch the balance");
 				}
 				default:
 				{

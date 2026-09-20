@@ -234,4 +234,35 @@ public boolean createAccount(BankAccount account)
 		}
 		return result>0?true:false;
 	}
+	
+	public double checkBalance(long accountNumber)
+	{
+		String query="SELECT BALANCE FROM BANK_ACCOUNT WHERE ACCOUNT_NUMBER=?";
+		
+		Connection connection=DataBaseConnection.getConnection();
+		double balance=0;
+		try {
+			PreparedStatement preparedStatement=connection.prepareStatement(query);
+			ResultSet resultSet=preparedStatement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				balance=resultSet.getDouble(5);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(connection!=null)
+			{
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return balance>0.0?balance:0.0;
+	}
 }

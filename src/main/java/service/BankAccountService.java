@@ -57,4 +57,12 @@ public class BankAccountService {
 		else
 			return dao.deposit(accountNumber, amount);
 	}
+	
+	public double checkBalance(long accountNumber)
+	{
+		if(accountNumber!=0)
+			return 0.0;
+		else
+			return dao.checkBalance(accountNumber);
+	}
 }
