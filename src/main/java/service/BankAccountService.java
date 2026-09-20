@@ -49,4 +49,12 @@ public class BankAccountService {
 	{
 		return dao.findAllAccounts();
 	}
+	
+	public boolean deposite(long accountNumber,double amount)
+	{
+		if(accountNumber==0 || amount<0)
+			return false;
+		else
+			return dao.deposit(accountNumber, amount);
+	}
 }

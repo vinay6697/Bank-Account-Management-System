@@ -18,7 +18,8 @@ public class BankManagementSystem {
 			System.out.println("Enter 2 to update an account");
 			System.out.println("Enter 3 to find an account");
 			System.out.println("Enter 4 to delete an account");
-			System.out.println("Enter 5 to find al the accounts");
+			System.out.println("Enter 5 to find all the accounts");
+			System.out.println("Enter 6 to deposit the money into account");
 			
 			int choice=sc.nextInt();
 			switch(choice)
@@ -126,6 +127,21 @@ public class BankManagementSystem {
 					{
 						System.out.println("unable to fetch all the accounts");
 					}
+					break;
+				}
+				case 6:
+				{
+					System.out.println("Enter the accountNumber");
+					long accountNumber=sc.nextLong();
+					System.out.println("Enter the amount");
+					double amount=sc.nextDouble();
+					
+					boolean result=service.deposite(accountNumber, amount);
+					if(result)
+						System.out.println("amount deposited successfully");
+					else
+						System.out.println("error occured deposite failed");
+					break;
 				}
 				default:
 				{

@@ -193,4 +193,45 @@ public boolean createAccount(BankAccount account)
 		
 		return bankAccounts.size()!=0?bankAccounts:null;
 	}
+
+	public boolean deposit(long accountNumber,double amount)
+	{
+		String selectQuery="SELECT BALANCE FROM BANK_ACCOUNT WHERE ACCOUNT_NUMBER=?";
+		Connection connection=DataBaseConnection.getConnection();
+		int result=0;
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
+			preparedStatement.setLong(1, accountNumber);
+			ResultSet resultSet=preparedStatement.executeQuery();
+			
+			double balance=0L;
+			while(resultSet.next())
+			{
+				balance=resultSet.getDouble(1);
+			}
+			
+			balance+=amount;
+			
+			String updateQuery="UPDATE BANK_ACCOUNT SET BALANCE=? WHERE ACCOUNT_NUMBER=?";
+			PreparedStatement prepareStatement1=connection.prepareStatement(updateQuery);
+			prepareStatement1.setDouble(1, balance);
+			prepareStatement1.setDouble(2, accountNumber);
+			
+			result=prepareStatement1.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(connection!=null)
+			{
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result>0?true:false;
+	}
 }
