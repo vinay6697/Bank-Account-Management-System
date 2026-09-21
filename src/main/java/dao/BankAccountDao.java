@@ -285,12 +285,10 @@ public boolean createAccount(BankAccount account)
 				balance=resultSet.getDouble(1);
 			}
 			
-			System.out.println(amount<balance);
 			if(amount<balance)
 			{
 				balance-=amount;
 				
-				System.out.println(balance);
 				String balanceUpdate="UPDATE BANK_ACCOUNT SET BALANCE=? WHERE ACCOUNT_NUMBER=?";
 				PreparedStatement preparedStatement1=connection.prepareStatement(balanceUpdate);
 				
