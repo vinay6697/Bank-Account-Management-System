@@ -65,4 +65,9 @@ public class BankAccountService {
 		else
 			return dao.checkBalance(accountNumber);
 	}
+	
+	public boolean withdraw(long accountNumber,double amount)
+	{
+		return dao.withdraw(accountNumber, amount);
+	}
 }

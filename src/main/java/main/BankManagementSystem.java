@@ -21,6 +21,7 @@ public class BankManagementSystem {
 			System.out.println("Enter 5 to find all the accounts");
 			System.out.println("Enter 6 to deposit the money into account");
 			System.out.println("Enter 7 to check balance");
+			System.out.println("Enter 8 to withdraw money");
 			
 			int choice=sc.nextInt();
 			switch(choice)
@@ -154,6 +155,20 @@ public class BankManagementSystem {
 						System.out.println("balance is: "+balance);
 					else
 						System.out.println("unable to fetch the balance");
+				}
+				case 8:{
+					System.out.println("Enter the accountNumber");
+					long accountNumber=sc.nextLong();
+					
+					System.out.println("Enter the amount to be withdrawn");
+					double amount=sc.nextDouble();
+					
+					boolean result=service.withdraw(accountNumber, amount);
+					if(result)
+						System.out.println("amount withdrawn successfully");
+					else
+						System.out.println("unable to withdraw the amount");
+					break;
 				}
 				default:
 				{

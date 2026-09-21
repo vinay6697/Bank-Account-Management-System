@@ -204,7 +204,7 @@ public boolean createAccount(BankAccount account)
 			preparedStatement.setLong(1, accountNumber);
 			ResultSet resultSet=preparedStatement.executeQuery();
 			
-			double balance=0L;
+			double balance=0;
 			while(resultSet.next())
 			{
 				balance=resultSet.getDouble(1);
@@ -256,7 +256,7 @@ public boolean createAccount(BankAccount account)
 		{
 			if(connection!=null)
 			{
-				try {
+				try {	
 					connection.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -264,5 +264,53 @@ public boolean createAccount(BankAccount account)
 			}
 		}
 		return balance>0.0?balance:0.0;
+	}
+	
+	public boolean withdraw(long accountNumber,double amount)
+	{
+		String query="SELECT BALANCE FROM BANK_ACCOUNT WHERE ACCOUNT_NUMBER=?";
+		Connection connection=DataBaseConnection.getConnection();
+		
+		double balance=0.0;
+		int result=0;
+		
+		try {
+			PreparedStatement preparedStatement=connection.prepareStatement(query);
+			preparedStatement.setLong(1, accountNumber);
+			
+			ResultSet resultSet=preparedStatement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				balance=resultSet.getDouble(1);
+			}
+			
+			System.out.println(amount<balance);
+			if(amount<balance)
+			{
+				balance-=amount;
+				
+				System.out.println(balance);
+				String balanceUpdate="UPDATE BANK_ACCOUNT SET BALANCE=? WHERE ACCOUNT_NUMBER=?";
+				PreparedStatement preparedStatement1=connection.prepareStatement(balanceUpdate);
+				
+				preparedStatement1.setDouble(1, balance);
+				preparedStatement1.setLong(2, accountNumber);
+				result=preparedStatement1.executeUpdate();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(connection!=null)
+			{
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result>0?true:false;
 	}
 }
