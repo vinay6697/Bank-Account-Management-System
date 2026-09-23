@@ -170,6 +170,23 @@ public class BankManagementSystem {
 						System.out.println("unable to withdraw the amount");
 					break;
 				}
+				case 9:
+				{
+					System.out.println("Enter the sender accountNumber");
+					long senderAccountNumber=sc.nextLong();
+					
+					System.out.println("Enter amount to transer");
+					double amount=sc.nextDouble();
+					
+					System.out.println("Enter the reciever accountNumber");
+					long receiverAccountNumber=sc.nextLong();
+					
+					
+					if(service.transfer(senderAccountNumber, amount, receiverAccountNumber))
+							System.out.println("amount transfered successfully");
+					else
+						System.out.println("transaction error");
+				}
 				default:
 				{
 					System.out.println("Invalid input \nplease enter the valid input");

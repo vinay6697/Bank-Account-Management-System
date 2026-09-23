@@ -311,4 +311,54 @@ public boolean createAccount(BankAccount account)
 		}
 		return result>0?true:false;
 	}
+	
+	public boolean transfer(long senderAccountNumber,double senderMoney,
+			long receiverAccountNumber)
+	{
+		double sendersBalance=0.0;
+		double receiversBalance=0.0;
+		int result=0;
+		Connection connection=DataBaseConnection.getConnection();
+		String sendersQuery="SELECT BALANCE FROM BANK_ACCOUNT WHERE ACCOUNT_NUMBER=?";
+		String recieverQuery="SELECT BALANCE FROM BANK_ACCOUNT WHERE ACCOUNT_NUMBER=?";
+		try {
+			PreparedStatement preparedStatement=connection.prepareStatement(sendersQuery);
+			preparedStatement.setLong(1, senderAccountNumber);
+			
+			ResultSet senderResultSet=preparedStatement.executeQuery();
+			
+			while(senderResultSet.next()) {
+				sendersBalance=senderResultSet.getDouble(1);
+			}
+			
+			PreparedStatement preparedStatement2=connection.prepareStatement(recieverQuery);
+			preparedStatement2.setLong(1, receiverAccountNumber);
+			
+			ResultSet receiversResultSet=preparedStatement.executeQuery();
+			
+			while(receiversResultSet.next())
+			{
+				receiversBalance=receiversResultSet.getDouble(1);
+			}
+			
+			if(senderMoney>sendersBalance)
+			{
+				sendersBalance-=senderMoney;
+			}
+			
+			receiversBalance+=senderMoney;
+			
+			String receiverUpdateQuery="UPDATE BANK_ACCOUNT SET BALANCE=? WHERE ACCOUNT_NUMBER=?";
+			
+			PreparedStatement preparedStatement3=connection.prepareStatement(receiverUpdateQuery);
+			preparedStatement3.setDouble(1, receiversBalance);
+			
+			result=preparedStatement3.executeUpdate();
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result>0?true:false;
+	}
 }

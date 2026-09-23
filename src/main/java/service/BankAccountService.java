@@ -1,9 +1,14 @@
 package service;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import dao.BankAccountDao;
 import entity.BankAccount;
+import util.DataBaseConnection;
 
 public class BankAccountService {
 	BankAccountDao dao=new BankAccountDao();
@@ -75,5 +80,10 @@ public class BankAccountService {
 			System.out.println("accountDetails should be correct");
 		
 		return flag;
+	}
+	
+	public boolean transfer(long senderAccountNumber,double senderMoney,long receiverAccountNumber)
+	{
+		return dao.transfer(senderAccountNumber, senderMoney, receiverAccountNumber);
 	}
 }
