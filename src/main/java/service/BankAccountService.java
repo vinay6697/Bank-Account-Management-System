@@ -68,6 +68,12 @@ public class BankAccountService {
 	
 	public boolean withdraw(long accountNumber,double amount)
 	{
-		return dao.withdraw(accountNumber, amount);
+		boolean flag=false;
+		if(accountNumber!=0 && amount>0)
+			flag=dao.withdraw(accountNumber, amount);
+		else
+			System.out.println("accountDetails should be correct");
+		
+		return flag;
 	}
 }
