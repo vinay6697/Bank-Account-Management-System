@@ -84,6 +84,9 @@ public class BankAccountService {
 	
 	public boolean transfer(long senderAccountNumber,double senderMoney,long receiverAccountNumber)
 	{
-		return dao.transfer(senderAccountNumber, senderMoney, receiverAccountNumber);
+		if(senderAccountNumber!=0  && senderMoney>0 && receiverAccountNumber!=0)
+			return dao.transfer(senderAccountNumber, senderMoney, receiverAccountNumber);
+		else
+			return false;
 	}
 }
