@@ -191,7 +191,7 @@ public class BankManagementSystem {
 					if(service.transfer(senderAccountNumber, amount, receiverAccountNumber))
 							System.out.println("amount transfered successfully");
 					else
-						System.out.println("transaction error");
+						System.out.println("Transaction error occured");
 					
 					break;
 				}

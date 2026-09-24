@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -318,20 +319,20 @@ public boolean createAccount(BankAccount account)
 	{
 		double sendersBalance=0.0;
 		double receiversBalance=0.0;
-		int result=0;
 		
 		Connection connection=DataBaseConnection.getConnection();
 		
 		String sendersQuery="SELECT BALANCE FROM BANK_ACCOUNT WHERE ACCOUNT_NUMBER=?";
 		String recieverQuery="SELECT BALANCE FROM BANK_ACCOUNT WHERE ACCOUNT_NUMBER=?";
-		
+		int result1=0;
+		int result2=0;
 		try {
 			
 			//fetching the accountNumber sender balance
-			PreparedStatement preparedStatement=connection.prepareStatement(sendersQuery);
-			preparedStatement.setLong(1, senderAccountNumber);
+			PreparedStatement preparedStatement1=connection.prepareStatement(sendersQuery);
+			preparedStatement1.setLong(1, senderAccountNumber);
 			
-			ResultSet senderResultSet=preparedStatement.executeQuery();
+			ResultSet senderResultSet=preparedStatement1.executeQuery();
 			
 			while(senderResultSet.next()) {
 				sendersBalance=senderResultSet.getDouble(1);
@@ -341,39 +342,46 @@ public boolean createAccount(BankAccount account)
 			PreparedStatement preparedStatement2=connection.prepareStatement(recieverQuery);
 			preparedStatement2.setLong(1, receiverAccountNumber);
 			
-			ResultSet receiversResultSet=preparedStatement.executeQuery();
+			ResultSet receiversResultSet=preparedStatement2.executeQuery();
 			
 			while(receiversResultSet.next())
 			{
 				receiversBalance=receiversResultSet.getDouble(1);
 			}
 			
-			if(senderMoney>sendersBalance)
-			{
-				sendersBalance-=senderMoney;
-			}
+			System.out.println("sender balance:"+sendersBalance);
+			System.out.println("receiver balance: "+receiversBalance);
+			//checking the balance
+			if(senderMoney<=sendersBalance)
+				sendersBalance=(sendersBalance-senderMoney);
+
+			System.out.println("senders balance:"+sendersBalance);
 			
-			//updating the receivers balance after transaction successful
+			//updating the sender balance after transaction successful
 			String senderUpdateQuery="UPDATE BANK_ACCOUNT SET BALANCE=? WHERE ACCOUNT_NUMBER=?";
 			PreparedStatement preparedStatement3=connection.prepareStatement(senderUpdateQuery);
-			receiversBalance+=senderMoney;
 			
 			preparedStatement3.setDouble(1, sendersBalance);
-			preparedStatement3.setInt(2, receiverAccountNumber);
+			preparedStatement3.setLong(2, senderAccountNumber);
 			
+			result1=preparedStatement3.executeUpdate();
 			
+			receiversBalance=receiversBalance+senderMoney;
+			
+			System.out.println("receiver balance:"+receiversBalance);
+			
+			//updating the receivers balance after transaction successful
 			String receiverUpdateQuery="UPDATE BANK_ACCOUNT SET BALANCE=? WHERE ACCOUNT_NUMBER=?";
 			
 			PreparedStatement preparedStatement4=connection.prepareStatement(receiverUpdateQuery);
 			preparedStatement4.setDouble(1, receiversBalance);
-			preparedStatement4.setDouble(2, receiverAccountNumber);
+			preparedStatement4.setLong(2, receiverAccountNumber);
 			
-			result=preparedStatement4.executeUpdate();
-			
+			result2=preparedStatement4.executeUpdate();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return result>0?true:false;
+		return result1>0 && result2>0?true:false;
 	}
 }
