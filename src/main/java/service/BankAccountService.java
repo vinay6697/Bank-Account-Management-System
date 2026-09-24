@@ -1,14 +1,9 @@
 package service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 import dao.BankAccountDao;
 import entity.BankAccount;
-import util.DataBaseConnection;
 
 public class BankAccountService {
 	BankAccountDao dao=new BankAccountDao();
@@ -65,7 +60,7 @@ public class BankAccountService {
 	
 	public double checkBalance(long accountNumber)
 	{
-		if(accountNumber!=0)
+		if(accountNumber==0)
 			return 0.0;
 		else
 			return dao.checkBalance(accountNumber);

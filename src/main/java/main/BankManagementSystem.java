@@ -8,7 +8,7 @@ import entity.BankAccount;
 import service.BankAccountService;
 
 public class BankManagementSystem {
-	public static void main(String[] args) {
+	public static void main(String[] args) {System.out.println();
 		Scanner sc=new Scanner(System.in);
 		BankAccountService service=new BankAccountService();
 		String c="Y";
@@ -22,6 +22,7 @@ public class BankManagementSystem {
 			System.out.println("Enter 6 to deposit the money into account");
 			System.out.println("Enter 7 to check balance");
 			System.out.println("Enter 8 to withdraw money");
+			System.out.println("Enter 9 to transfer the money");
 			
 			int choice=sc.nextInt();
 			switch(choice)
@@ -52,17 +53,21 @@ public class BankManagementSystem {
 					LocalDateTime dateTime = LocalDateTime.now();
 					
 					BankAccount account=new BankAccount(accountNumber,name,email,phoneNumber,balance,accountType,dateTime);
-					service.createAccount(account);
+					boolean result=service.createAccount(account);
+					if(result)
+						System.out.println("Account Created Successfully");
+					else
+						System.out.println("Account creatin error");
 					break;
 				}
 				case 2:
 				{
 					System.out.println("Enter the account id");
 					long accountNumber=sc.nextLong();
+					sc.nextLine();
 					
 					System.out.println("Enter the email");
 					String email=sc.nextLine();
-					sc.nextLine();
 					
 					System.out.println("Enter the phoneNumber");
 					long phoneNumber=sc.nextLong();
@@ -155,6 +160,7 @@ public class BankManagementSystem {
 						System.out.println("balance is: "+balance);
 					else
 						System.out.println("unable to fetch the balance");
+					break;
 				}
 				case 8:{
 					System.out.println("Enter the accountNumber");
@@ -186,6 +192,8 @@ public class BankManagementSystem {
 							System.out.println("amount transfered successfully");
 					else
 						System.out.println("transaction error");
+					
+					break;
 				}
 				default:
 				{
