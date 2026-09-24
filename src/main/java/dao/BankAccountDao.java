@@ -327,6 +327,7 @@ public boolean createAccount(BankAccount account)
 		int result1=0;
 		int result2=0;
 		try {
+			  connection.setAutoCommit(false);
 			
 			//fetching the accountNumber sender balance
 			PreparedStatement preparedStatement1=connection.prepareStatement(sendersQuery);
@@ -349,14 +350,10 @@ public boolean createAccount(BankAccount account)
 				receiversBalance=receiversResultSet.getDouble(1);
 			}
 			
-			System.out.println("sender balance:"+sendersBalance);
-			System.out.println("receiver balance: "+receiversBalance);
 			//checking the balance
 			if(senderMoney<=sendersBalance)
 				sendersBalance=(sendersBalance-senderMoney);
 
-			System.out.println("senders balance:"+sendersBalance);
-			
 			//updating the sender balance after transaction successful
 			String senderUpdateQuery="UPDATE BANK_ACCOUNT SET BALANCE=? WHERE ACCOUNT_NUMBER=?";
 			PreparedStatement preparedStatement3=connection.prepareStatement(senderUpdateQuery);
@@ -365,10 +362,10 @@ public boolean createAccount(BankAccount account)
 			preparedStatement3.setLong(2, senderAccountNumber);
 			
 			result1=preparedStatement3.executeUpdate();
-			
+			Savepoint sp = connection.setSavepoint("AFTER_SENDER_UPDATE");
+
+			//updating the receiver balance
 			receiversBalance=receiversBalance+senderMoney;
-			
-			System.out.println("receiver balance:"+receiversBalance);
 			
 			//updating the receivers balance after transaction successful
 			String receiverUpdateQuery="UPDATE BANK_ACCOUNT SET BALANCE=? WHERE ACCOUNT_NUMBER=?";
@@ -380,8 +377,26 @@ public boolean createAccount(BankAccount account)
 			result2=preparedStatement4.executeUpdate();
 			
 		} catch (SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 			e.printStackTrace();
 		}
-		return result1>0 && result2>0?true:false;
+		finally
+		{
+			if(connection!=null)
+			{
+				try {
+					connection.setAutoCommit(true);
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result1>0 && result2>0 ?true:false;
+		
 	}
 }
