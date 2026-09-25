@@ -84,4 +84,9 @@ public class BankAccountService {
 		else
 			return false;
 	}
+	
+	public void findByName(String name)
+	{
+		dao.findByName(name);
+	}
 }

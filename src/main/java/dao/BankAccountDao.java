@@ -399,4 +399,32 @@ public boolean createAccount(BankAccount account)
 		return result1>0 && result2>0 ?true:false;
 		
 	}
+	
+	public void findByName(String name)
+	{
+		String query="SELECT * FROM BANK_ACCOUNT WHERE TRIM(LOWER(ACCOUNT_HOLDER_NAME)) LIKE ?";
+		Connection connection=DataBaseConnection.getConnection();
+		
+		try {
+			PreparedStatement preparedStatement=connection.prepareStatement(query);
+			String s="%"+name+"%";
+			preparedStatement.setString(1, s.trim().toLowerCase());
+			
+			ResultSet resultSet=preparedStatement.executeQuery();
+			while(resultSet.next())
+			{
+				System.out.println(resultSet.getLong(1));
+				System.out.println(resultSet.getString(2));
+				System.out.println(resultSet.getString(3));
+				System.out.println(resultSet.getLong(4));
+				System.out.println(resultSet.getDouble(5));
+				System.out.println(resultSet.getString(6));
+				System.out.println(resultSet.getTimestamp(7).toLocalDateTime());
+				
+				System.out.println("------------------------------");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

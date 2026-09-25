@@ -23,6 +23,7 @@ public class BankManagementSystem {
 			System.out.println("Enter 7 to check balance");
 			System.out.println("Enter 8 to withdraw money");
 			System.out.println("Enter 9 to transfer the money");
+			System.out.println("Enter 10 to find by name");
 			
 			int choice=sc.nextInt();
 			switch(choice)
@@ -186,13 +187,23 @@ public class BankManagementSystem {
 					
 					System.out.println("Enter the reciever accountNumber");
 					long receiverAccountNumber=sc.nextLong();
-					
+
 					
 					if(service.transfer(senderAccountNumber, amount, receiverAccountNumber))
 							System.out.println("amount transfered successfully");
 					else
 						System.out.println("Transaction error occured");
 					
+					break;
+				}
+				
+				case 10:
+				{
+					sc.nextLine();
+					System.out.println("Enter the name");
+					String name=sc.nextLine();
+					service.findByName(name);;
+		
 					break;
 				}
 				default:
