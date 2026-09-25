@@ -85,8 +85,8 @@ public class BankAccountService {
 			return false;
 	}
 	
-	public void findByName(String name)
+	public List<BankAccount> findByName(String name)
 	{
-		dao.findByName(name);
+		return name.isEmpty()?null:dao.findByName(name);
 	}
 }

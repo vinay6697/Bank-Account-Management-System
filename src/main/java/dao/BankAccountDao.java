@@ -400,7 +400,7 @@ public boolean createAccount(BankAccount account)
 		
 	}
 	
-	public void findByName(String name)
+	public List<BankAccount> findByName(String name)
 	{
 		String query="SELECT * FROM BANK_ACCOUNT WHERE TRIM(LOWER(ACCOUNT_HOLDER_NAME)) LIKE ?";
 		Connection connection=DataBaseConnection.getConnection();
@@ -430,7 +430,6 @@ public boolean createAccount(BankAccount account)
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		return bankAccounts.size()>0:bankAccounts?null;
+		return bankAccounts.size()>0?bankAccounts:null;
 	}
 }

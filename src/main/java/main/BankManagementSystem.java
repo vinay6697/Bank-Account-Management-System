@@ -8,7 +8,7 @@ import entity.BankAccount;
 import service.BankAccountService;
 
 public class BankManagementSystem {
-	public static void main(String[] args) {System.out.println();
+	public static void main(String[] args) {
 		Scanner sc=new Scanner(System.in);
 		BankAccountService service=new BankAccountService();
 		String c="Y";
@@ -202,7 +202,26 @@ public class BankManagementSystem {
 					sc.nextLine();
 					System.out.println("Enter the name");
 					String name=sc.nextLine();
-					service.findByName(name);;
+					List<BankAccount> bankAccounts=service.findByName(name);
+					
+					if(bankAccounts!=null)
+					{
+						for(BankAccount account:bankAccounts)
+						{
+							System.out.println("Account number is \t:"+account.getAccountNumber());
+							System.out.println("Customer name  is \t:"+account.getAccountHolderName());
+							System.out.println("Customer email is \t:"+account.getEmail());
+							System.out.println("Customer Phone is \t:"+account.getAccountNumber());
+							System.out.println("Customer balance is \t:"+account.getBalance());
+							System.out.println("account number is \t:"+account.getAccountType());
+							System.out.println("account created on is \t:"+account.getDateTime());
+							System.out.println("---------------------------------------------");
+						}
+					}
+					else
+					{
+						System.out.println("something went wrong");
+					}
 		
 					break;
 				}
