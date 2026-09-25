@@ -404,6 +404,7 @@ public boolean createAccount(BankAccount account)
 	{
 		String query="SELECT * FROM BANK_ACCOUNT WHERE TRIM(LOWER(ACCOUNT_HOLDER_NAME)) LIKE ?";
 		Connection connection=DataBaseConnection.getConnection();
+		List<BankAccount> bankAccounts=new ArrayList<>();
 		
 		try {
 			PreparedStatement preparedStatement=connection.prepareStatement(query);
@@ -411,20 +412,25 @@ public boolean createAccount(BankAccount account)
 			preparedStatement.setString(1, s.trim().toLowerCase());
 			
 			ResultSet resultSet=preparedStatement.executeQuery();
+			BankAccount bankAccount=new BankAccount();
 			while(resultSet.next())
 			{
-				System.out.println(resultSet.getLong(1));
-				System.out.println(resultSet.getString(2));
-				System.out.println(resultSet.getString(3));
-				System.out.println(resultSet.getLong(4));
-				System.out.println(resultSet.getDouble(5));
-				System.out.println(resultSet.getString(6));
-				System.out.println(resultSet.getTimestamp(7).toLocalDateTime());
+				bankAccount.setAccountNumber(resultSet.getLong(1));
+				bankAccount.setAccountHolderName(resultSet.getString(2));
+				bankAccount.setEmail(resultSet.getString(3));
+				bankAccount.setPhoneNumber(resultSet.getLong(4));
+				bankAccount.setBalance(resultSet.getDouble(5));
+				bankAccount.setAccountType(resultSet.getString(6));
+				bankAccount.setDateTime(resultSet.getTimestamp(7).toLocalDateTime());
+				
+				bankAccounts.add(bankAccount);
 				
 				System.out.println("------------------------------");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		return bankAccounts.size()>0:bankAccounts?null;
 	}
 }
