@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Savepoint;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -415,17 +416,19 @@ public boolean createAccount(BankAccount account)
 			BankAccount bankAccount=new BankAccount();
 			while(resultSet.next())
 			{
-				bankAccount.setAccountNumber(resultSet.getLong(1));
-				bankAccount.setAccountHolderName(resultSet.getString(2));
-				bankAccount.setEmail(resultSet.getString(3));
-				bankAccount.setPhoneNumber(resultSet.getLong(4));
-				bankAccount.setBalance(resultSet.getDouble(5));
-				bankAccount.setAccountType(resultSet.getString(6));
-				bankAccount.setDateTime(resultSet.getTimestamp(7).toLocalDateTime());
+				
+				long accountNumber=resultSet.getLong(1);
+				String accountHolderName=resultSet.getString(2);
+				String email=resultSet.getString(3);
+				long phoneNumber=resultSet.getLong(4);
+				double balance=resultSet.getDouble(5);
+				String accountType=resultSet.getString(6);
+				LocalDateTime date=resultSet.getTimestamp(7).toLocalDateTime().now();
+				
+				bankAccount=new BankAccount(accountNumber,accountHolderName,email,phoneNumber,balance,
+						accountType,date);
 				
 				bankAccounts.add(bankAccount);
-				
-				System.out.println("------------------------------");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

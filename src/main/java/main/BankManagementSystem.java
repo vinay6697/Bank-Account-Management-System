@@ -206,6 +206,7 @@ public class BankManagementSystem {
 					
 					if(bankAccounts!=null)
 					{
+						System.out.println(bankAccounts.size());
 						for(BankAccount account:bankAccounts)
 						{
 							System.out.println("Account number is \t:"+account.getAccountNumber());
